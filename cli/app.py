@@ -15,8 +15,8 @@ def send(path):
         data["name"] = path
         data["data"] = file.read()
     
-    r = requests.post("http://localhost:8080/session", data=data)
-    r.json()
+    data = json.dumps(data)
+    requests.post("http://localhost:8080/session", data=data)
 
 def init(url):
     if os.path.exists(yote_dir_path):
