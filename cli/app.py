@@ -8,6 +8,14 @@ cwd = os.getcwd()
 yote_dir_path = cwd + "/.yote"
 yote_config_file = yote_dir_path + "/config"
 
+def send(path):
+    data = {}
+    with open(path, "r") as file:
+        data["name"] = path
+        data["data"] = file.read()
+    
+    print(data)
+
 def init(url):
     if os.path.exists(yote_dir_path):
         print('Yote session already initialized')
@@ -24,5 +32,6 @@ def init(url):
 
 if __name__ == "__main__":
     fire.Fire({
-        "init": init
+        "init": init,
+        "send": send
     })
