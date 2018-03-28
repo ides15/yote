@@ -3,6 +3,7 @@ import os
 import json
 
 import fire
+import requests
 
 cwd = os.getcwd()
 yote_dir_path = cwd + "/.yote"
@@ -14,7 +15,8 @@ def send(path):
         data["name"] = path
         data["data"] = file.read()
     
-    print(data)
+    r = requests.post("http://localhost:8080/session", data=data)
+    r.json()
 
 def init(url):
     if os.path.exists(yote_dir_path):
