@@ -1,7 +1,7 @@
 import socket
 import select
 import sys
-from thread import *
+import thread
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -52,7 +52,7 @@ while True:
 
     print(addr[0] + " connected")
 
-    start_new_thread(clientthread, (conn, addr))
+    thread.start_new_thread(clientthread, (conn, addr))
 
 conn.close()
 server.close()
