@@ -1,4 +1,4 @@
-# yote
+# [yote](https://github.com/ides15/yote)
 
 ## Project Description
 Tools like Google Docs are helpful for collaborating on documents in real-time but collaborative programming is usually only done through version control or by looking at the same screen while on person is typing. This usually works, but if you are a remote worker, then pair programming becomes difficult and inefficient. This project's goal would be to make pair programming easier by creating an interface like Google Docs designed and developed for programming.
