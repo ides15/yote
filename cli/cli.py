@@ -16,7 +16,18 @@ def send(path):
         data["data"] = file.read()
     
     data = json.dumps(data)
-    requests.post("http://localhost:8080/session", data=data)
+
+    try:
+        requests.post("http://localhost:8080/session", data=data)
+    except requests.exceptions.ConnectionError:
+        print("API is down, try again later.")
+
+def recv():
+    r = requests.get("http://localhost:8080/session")
+    data = r.json()
+    
+    with open(data["name"], "w") as file:
+        file.write(data["data"])
 
 def init(url):
     if os.path.exists(yote_dir_path):
@@ -35,5 +46,6 @@ def init(url):
 if __name__ == "__main__":
     fire.Fire({
         "init": init,
-        "send": send
+        "send": send,
+        "recv": recv
     })
