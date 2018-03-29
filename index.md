@@ -15,6 +15,8 @@ By Checkpoint 1, since I just finalized what I am doing for the project, I don't
 
 By Checkpoint 2, I want to have the lobby mostly finished and allow users to send information between each other. I want the information to be sent in such a way that it will be intuitive to use that information in Vim to show separate users connected to the lobby.
 
+By Checkpoint 3, I want to have figured out how I will track events from cursor movements and text inputs from the origin host in Vim and broadcast those events to all users in the lobby. After I implement the event tracking, I will figure out how to fire those events in the other users' instances of Vim.
+
 The final project should be fully operational collaborative coding between multiple users through Vim. This includes the lobby session creation and Vim collaborative usage.
 
 ## Project Justification
