@@ -7,13 +7,17 @@ import requests
 
 cwd = os.getcwd()
 yote_dir_path = cwd + "/.yote"
-yote_config_file = yote_dir_path + "/config"
+yote_config_file = yote_dir_path + "/config.json"
 
 def send(path):
     data = {}
     with open(path, "r") as file:
         data["name"] = path
         data["data"] = file.read()
+    
+    with open(yote_config_file, "r") as config:
+        config_info = json.loads(config.read())
+        data["session_url"] = config_info["session_url"]
     
     data = json.dumps(data)
 
@@ -23,7 +27,11 @@ def send(path):
         print("API is down, try again later.")
 
 def recv():
-    r = requests.get("http://localhost:8080/session")
+    with open(yote_config_file, "r") as config:
+        config_info = json.loads(config.read())
+
+    payload = {"session_url": config_info["session_url"]}
+    r = requests.get("http://localhost:8080/session", params=payload)
     data = r.json()
     
     with open(data["name"], "w") as file:
@@ -38,10 +46,12 @@ def init(url):
     
     with open(yote_config_file, "wb") as file:
         data = {
-            "session_id": url
+            "session_url": url
         }
 
         file.write(json.dumps(data).encode())
+    
+    session_url = url
 
 if __name__ == "__main__":
     fire.Fire({
