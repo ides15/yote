@@ -11,13 +11,15 @@ The goal of this project is to allow multiple programmers to work on a piece of 
 I'll be making a documentation folder in my repository page for things like usage and how to set up and share a session. If I can add to the project, I'll try and make plugins for different editors and programming environments, like I said in the second paragraph.
 
 ## Project Schedule
-By Checkpoint 1, since I just finalized what I am doing for the project, I don't expect to have much done, but I'll look into how I'll set up the lobby and how multiple users can connect to that lobby easily.
+By Checkpoint 1, since I just finalized what I am doing for the project, I don't expect to have much done, but I'll look into how I'll set up the lobby and how multiple users can connect to that lobby easily. I also want to be able to send files between users so that all users have a starting file to work from. This will be established through a CLI and an API, and the starting file will be persisted.
 
 By Checkpoint 2, I want to have the lobby mostly finished and allow users to send information between each other. I want the information to be sent in such a way that it will be intuitive to use that information in Vim to show separate users connected to the lobby.
 
-By Checkpoint 3, I want to have figured out how I will track events from cursor movements and text inputs from the origin host in Vim and broadcast those events to all users in the lobby. After I implement the event tracking, I will figure out how to fire those events in the other users' instances of Vim.
+I also want to have a frontend set up by Checkpoint 2 that allows a user to generate a session URL that the user can distribute to other users so that they can join a common session. That URL will then be used to join a unique lobby (see the previous paragraph).
 
-The final project should be fully operational collaborative coding between multiple users through Vim. This includes the lobby session creation and Vim collaborative usage.
+By Checkpoint 3, I want to have figured out how I will track events from cursor movements and text inputs from the origin host and broadcast those events to all users in the lobby. After I implement the event tracking, I will figure out how to fire those events in the other users' machines.
+
+The final project should be fully operational collaborative coding between multiple users. This includes the lobby session creation and collaborative usage.
 
 ## Project Justification
 
