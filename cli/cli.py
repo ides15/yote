@@ -46,6 +46,7 @@ def init(url):
 
     data = {}
     data["session_url"] = parsed_url.path
+    data["port"] = 0
 
     try:
         requests.post("http://localhost:8080/session", data=json.dumps(data))

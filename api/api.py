@@ -24,8 +24,8 @@ def session():
         # response.data (encoded string) decoded and loaded into dict
         res = json.loads(request.data.decode())
 
-        # res (dict) loaded into a (session_url, ip_address) 2-tuple
-        data = (res["session_url"], "placeholder")
+        # res (dict) loaded into a (session_url, port) 2-tuple
+        data = (res["session_url"], 8080)
 
         c.execute(
             "INSERT INTO sessions(session_url, ip_address) VALUES (?, ?)", data)
