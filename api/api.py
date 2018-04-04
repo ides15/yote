@@ -9,6 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+# connects to db and causes sqlite to run on multithreaded system (like Flask)
 conn = sqlite3.connect("yote.db", check_same_thread=False)
 c = conn.cursor()
 
@@ -18,7 +19,7 @@ def begin_session():
         # getting the url and parsing it to work with
         parsed_url = urlparse.urlparse(request.url)
 
-        # getting the value for the paramater key "session_url"
+        # getting the value for the url paramater key "session_url"
         requested_url = urlparse.parse_qs(parsed_url.query)["session_url"]
 
         # turning the requested_url variable into a 1-tuple for insertion into db
