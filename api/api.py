@@ -16,10 +16,12 @@ c = conn.cursor()
 
 @app.route("/session", methods=["GET", "POST"])
 def session():
+    # creates the session URL for the frontend link
     if request.method == "GET":
         # returning a uuid for the session_url
         return "yote.rocks/" + str(uuid.uuid4())
 
+    # persists the session information (session_url, port, user_id)
     if request.method == "POST":
         # response.data (encoded string) decoded and loaded into dict
         res = json.loads(request.data.decode())
@@ -43,6 +45,7 @@ def session():
 
 @app.route("/file", methods=["GET", "POST"])
 def file():
+    # gets file in DB based on session URL
     if request.method == "GET":
         # getting the url and parsing it to work with
         parsed_url = urlparse.urlparse(request.url)
@@ -65,6 +68,7 @@ def file():
         # sending that info back to client
         return json.dumps(data)
 
+    # sends file to DB with session URL
     if request.method == "POST":
         # response.data (encoded string) decoded and loaded into dict
         res = json.loads(request.data.decode())
