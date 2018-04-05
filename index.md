@@ -1,25 +1,29 @@
-# [yote](https://github.com/ides15/yote)
+# [github.com/ides15/yote](https://github.com/ides15/yote)
 
 ## Project Description
 Tools like Google Docs are helpful for collaborating on documents in real-time but collaborative programming is usually only done through version control or by looking at the same screen while on person is typing. This usually works, but if you are a remote worker, then pair programming becomes difficult and inefficient. This project's goal would be to make pair programming easier by creating an interface like Google Docs designed and developed for programming.
 
 ## Project Design
-I think the main obstacle I will have to figure out for this project is getting users connected to one "lobby" in order to work on each other's machines at the same time. As I'm in the process of figuring out the full structure of the project, I'm not sure *exactly* how I'll do this, but I want to practice my Python so I'll at least be using that. I may set up a URL that the original user receives that they can give to the other user to connect to the lobby. I'll be using Flask or Django for this, as they are the most popular Web frameworks for Python that I know of. For the interface that programmers use, I will start with Vim, as it is a command line interface and probably one of the simplest text editors that I know how to use. Using Vim is only for the proof-of-concept, and I will attempt to make this project work between different editors and programming environments so that programmers aren't constrained by specific editors and editor features.
+I think the main obstacle I will have to figure out for this project is getting users connected to one "lobby" in order to work on each other's machines at the same time. As I'm in the process of figuring out the full structure of the project, I'm not sure *exactly* how I'll do this, but I want to practice my Python so I'll at least be using that. I may set up a URL that the original user receives that they can give to the other user to connect to the lobby. I'll be using Flask or Django for this, as they are the most popular Web frameworks for Python that I know of. For the interface that programmers use, I will start with a web interface, as it is a common interface that people know how to use and probably one of the easiest ways to collaborate over an internet. Using the web interface is only for the proof-of-concept, and I will attempt to make this project work between different editors and programming environments so that programmers aren't constrained by specific applications and editor features.
 
 The goal of this project is to allow multiple programmers to work on a piece of code at the same time, similar to how Google Docs does collaborative document editing. The use cases for this are to allow the user to easily set up a sharing session with other users (this includes the original user making the session and easily sharing it with the other users) and be able to edit code in real time with multiple users.
 
 I'll be making a documentation folder in my repository page for things like usage and how to set up and share a session. If I can add to the project, I'll try and make plugins for different editors and programming environments, like I said in the second paragraph.
 
 ## Project Schedule
-By Checkpoint 1, since I just finalized what I am doing for the project, I don't expect to have much done, but I'll look into how I'll set up the lobby and how multiple users can connect to that lobby easily. I also want to be able to send files between users so that all users have a starting file to work from. This will be established through a CLI and an API, and the starting file will be persisted.
+By Checkpoint 1, since I just finalized what I am doing for the project, I don't expect to have much done, but I'll look into how I'll set up the lobby and how multiple users can connect to that lobby easily. I also want to be able to send files between users so that all users have a starting file to work from. This will be established through a CLI and an API, and the starting file(s) will be persisted in a sqlite database.
 
-By Checkpoint 2, I want to have the lobby mostly finished and allow users to send information between each other. I want the information to be sent in such a way that it will be intuitive to use that information in Vim to show separate users connected to the lobby.
+By Checkpoint 2, I want to have the lobby set up in the following fashion:
+- CLI command to start lobby server for the original user's session URL
+- CLI command to allow other users to connect to that lobby
+- lobby unique to a specific session URL (only users with the specific session URL can connect to that lobby)
+- users can "chat" through that lobby (I'm not building a chat application, but a chat app is very similar in terms of the lobby system I want to implement so I'll just have the chat app working by Checkpoint 2)
 
-I also want to have a frontend set up by Checkpoint 2 that allows a user to generate a session URL that the user can distribute to other users so that they can join a common session. That URL will then be used to join a unique lobby (see the previous paragraph).
+I also want to have a frontend set up by Checkpoint 2 that allows a user to generate a session URL that the user can distribute to other users so that they can join a common session. That URL will then be used to join a unique lobby (see the previous paragraph). This frontend will also have various links to my github page and other social pages.
 
-By Checkpoint 3, I want to have figured out how I will track events from cursor movements and text inputs from the origin host and broadcast those events to all users in the lobby. After I implement the event tracking, I will figure out how to fire those events in the other users' machines.
+By Checkpoint 3, I want to have figured out how I will track events from text inputs from the origin host and other users and broadcast those events to all users in the lobby. After I implement the event tracking, I will figure out how to fire those events in the other users' machines. I'm not sure exactly where on the user's computer I'll broadcast those events to (maybe on a web interface), but it should show real-time event logging of all users in the lobby.
 
-The final project should be fully operational collaborative coding between multiple users. This includes the lobby session creation and collaborative usage.
+The final project should be operational collaborative coding between multiple users (similar to Google Docs). This includes the lobby session creation and collaborative usage. The lobby should be unique and only accept users who have the correct session URL.
 
 ## Project Justification
 
@@ -30,10 +34,10 @@ I think this project is novel enough because there aren't many (if any) products
 This project will be complex because of 3 main things:
 - lobby sessions
 - security
-- integration with editors
+- event tracking
 
 The lobby sessions will be difficult because there needs to be a way that users can **easily** connect to the same unique lobby and transmit information quickly through to all lobby members. This will require load balancing, some sort of web socket implementation, and it will all have to be done securely.
 
 Security is very important for this project because private source code obviously can't be sent across the internet unprotected. Another reason is because the lobby sessions should only be reserved for users that the original user wants in that lobby, not random people that can edit the code however they want.
 
-Integration with editors is the third main complexity with this project. Sending information between computers isn't hard, but doing it in a way that is fast and easily consumable by editors will be a challenge. I am only going to be using Vim at first due to Vim's simplicity and the fact that it is a command-line editor. Once the project works well with Vim, I can look into a more universal system that can work with multiple programming environments.
+Event tracking is the third main complexity with this project. Sending information between computers isn't hard, but finding the information to send and doing it in a way that is fast and easily consumable will be a challenge. I am only going to be using a web interface at first due to it's simplicity and the fact that it is an established way of people to collaborate over an internet. Once the project works well with the web interface, I can look into a more universal system that can work with multiple programming environments.
