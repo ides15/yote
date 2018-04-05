@@ -24,6 +24,9 @@ def session():
         # response.data (encoded string) decoded and loaded into dict
         res = json.loads(request.data.decode())
 
+        # TODO make not hardcoded
+        # port should increment every time
+        # a post request is fired up to 8100
         port = 8081
 
         # res (dict) loaded into a (session_url, port) 2-tuple
