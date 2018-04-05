@@ -24,11 +24,14 @@ def session():
         # response.data (encoded string) decoded and loaded into dict
         res = json.loads(request.data.decode())
 
+        port = 8081
+
         # res (dict) loaded into a (session_url, port) 2-tuple
-        data = (res["session_url"], 8080)
+        data = (res["session_url"], port)
+        print("initializing sessiong with data", data)
 
         c.execute(
-            "INSERT INTO sessions(session_url, ip_address) VALUES (?, ?)", data)
+            "INSERT INTO sessions(session_url, port) VALUES (?, ?)", data)
         conn.commit()
 
         # sending session_url back to the client

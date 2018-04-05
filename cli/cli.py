@@ -10,6 +10,10 @@ cwd = os.getcwd()
 yote_dir_path = cwd + "/.yote"
 yote_config_file = yote_dir_path + "/config.json"
 
+# TODO make a login command
+# saves user info to the config file
+# persists to user table in DB
+
 
 def send(path):
     data = {}
@@ -46,7 +50,11 @@ def init(url):
 
     data = {}
     data["session_url"] = parsed_url.path
-    data["port"] = 0
+
+    if os.path.exists(yote_dir_path):
+        print('Yote session already initialized')
+        print('Run "yote reinit <url>" with new URL to create a new session (not implemented yet)')
+        return
 
     try:
         requests.post("http://localhost:8080/session", data=json.dumps(data))
@@ -54,11 +62,9 @@ def init(url):
         print("API is down, try again later.")
         return
 
-    if os.path.exists(yote_dir_path):
-        print('Yote session already initialized')
-    else:
-        os.mkdir(yote_dir_path)
-        print('Yote session initialized')
+    os.mkdir(yote_dir_path)
+    print('Yote session initialized')
+
     with open(yote_config_file, "wb") as file:
         file.write(json.dumps(data).encode())
 
