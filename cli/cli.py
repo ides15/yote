@@ -59,9 +59,10 @@ def recv():
     r = requests.get("http://localhost:8080/file", params=payload)
     data = r.json()
 
-    # replicates file from DB in the current user's directory
-    with open(data["name"], "w") as file:
-        file.write(data["data"])
+    # replicates files from DB in the current user's directory
+    for file in data:
+        with open(file["name"], "w") as source:
+            source.write(file["data"])
 
 
 # initializes a yote workspace in current directory

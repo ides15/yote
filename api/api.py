@@ -9,11 +9,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# connects to db and causes sqlite to run on multithreaded system (like Flask)
+# connects to db and causes sqlite to run on multithreaded system (supporting Flask)
 conn = sqlite3.connect("yote.db", check_same_thread=False)
 c = conn.cursor()
 
 
+# for session initialization [, between users]
 @app.route("/session", methods=["GET", "POST"])
 def session():
     # creates the session URL for the frontend link
@@ -43,6 +44,7 @@ def session():
         return res["session_url"]
 
 
+# for file transfers between users
 @app.route("/file", methods=["GET", "POST"])
 def file():
     # gets file in DB based on session URL
@@ -56,17 +58,31 @@ def file():
         # turning the requested_url variable into a 1-tuple for insertion into db
         requested_url = (requested_url[0],)
 
-        c.execute("SELECT name, data FROM files WHERE session_url=?",
+        c.execute("SELECT * FROM files WHERE session_url=?",
                   requested_url)
-        sql_res = c.fetchone()
+        sql_res = c.fetchall()
 
-        data = {
-            "name": sql_res[0],
-            "data": sql_res[1]
-        }
+        # makes list of file objects
+        # [
+        #   {
+        #       "name": <filename 1>,
+        #       "data": <file 1 contents>
+        #   },
+        #   {
+        #       "name": <filename 2>,
+        #       "data": <file 2 contents>
+        #   },
+        #   ...
+        # ]
+        files = []
+        for file in sql_res:
+            files.append({
+                "name": file[0],
+                "data": file[2]
+            })
 
         # sending that info back to client
-        return json.dumps(data)
+        return json.dumps(files)
 
     # sends file to DB with session URL
     if request.method == "POST":
