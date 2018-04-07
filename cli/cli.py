@@ -15,6 +15,14 @@ yote_config_file = yote_dir_path + "/config.json"
 # persists to user table in DB
 
 
+def start():
+    requests.post("http://localhost:8080/lobby")
+    pass
+
+def connect():
+    requests.get("http://localhost:8080/lobby")
+    pass
+
 # sends the file at <path> to DB as JSON object
 def send(path):
     data = {}
@@ -104,5 +112,7 @@ if __name__ == "__main__":
     fire.Fire({
         "init": init,
         "send": send,
-        "recv": recv
+        "recv": recv,
+        "start": start,
+        "connect": connect
     })

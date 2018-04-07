@@ -1,4 +1,5 @@
 import uuid
+import sys
 import json
 import urllib.parse as urlparse
 import sqlite3
@@ -12,6 +13,22 @@ CORS(app)
 # connects to db and causes sqlite to run on multithreaded system (supporting Flask)
 conn = sqlite3.connect("yote.db", check_same_thread=False)
 c = conn.cursor()
+
+
+@app.route("/lobby", methods=["GET", "POST"])
+def lobby():
+    if request.method == "GET":
+        # client = Client("0.0.0.0")
+        pass
+
+        return "lobby - get"
+
+    if request.method == "POST":
+        # server = Server("0.0.0.0", 10000)
+        # server.run()
+        pass
+
+        return "lobby - post"
 
 
 # for session initialization [, between users]
