@@ -6,7 +6,6 @@ yote init yote.rocks/12345
 yote start
     starts a lobby at yote.rocks:8080/12345
     connects user to that lobby
-    port number will increment for each NEW session created up to 8100
 
 yote connect
     connects a user to the lobby at yote.rocks:8080/12345
@@ -29,11 +28,8 @@ class Server:
     def handler(self, c, a):
         while True:
             data = c.recv(1024)
-            print("data:", data)
             for connection in self.connections:
                 connection.send(data)
-                print("{connection} send {data}".format(
-                    connection=a, data=data))
             if not data:
                 print(str(a[0]) + ":" + str(a[1]), "disconnected")
                 self.connections.remove(c)
@@ -50,29 +46,6 @@ class Server:
             print(str(a[0]) + ":" + str(a[1]), "connected")
 
 
-class Client:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def __init__(self, address):
-        self.sock.connect((address, 10000))
-
-        iThread = threading.Thread(target=self.send_msg)
-        iThread.daemon = True
-        iThread.start()
-
-        while True:
-            data = self.sock.recv(1024)
-            if not data:
-                break
-            print(str(data, "utf-8"))
-
-    def send_msg(self):
-        while True:
-            self.sock.send(bytes(input(""), "utf-8"))
-
-
-if (len(sys.argv) > 1):
-    client = Client(sys.argv[1])
-else:
+if __name__ == "__main__":
     server = Server()
     server.run()

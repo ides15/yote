@@ -1,32 +1,28 @@
 import socket
-import select
+import threading
 import sys
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-if len(sys.argv) != 3:
-    print("Correct usage: script, IP address, port number")
-    exit()
 
-IP_address = str(sys.argv[1])
-Port = int(sys.argv[2])
+class Client:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server.connect((IP_address, Port))
+    def __init__(self, address):
+        self.sock.connect((address, 10000))
 
-while True:
-    sockets_list = [sys.stdin, server]
+        iThread = threading.Thread(target=self.send_msg)
+        iThread.daemon = True
+        iThread.start()
 
-    read_sockets, write_socket, error_socket = select.select(
-        sockets_list, [], [])
+        while True:
+            data = self.sock.recv(1024)
+            if not data:
+                break
+            print(str(data, "utf-8"))
 
-    for socks in read_sockets:
-        if socks == server:
-            message = socks.recv(2048)
-            print(message)
-        else:
-            message = sys.stdin.readline()
-            server.send(message.encode())
-            sys.stdout.write("<You>")
-            sys.stdout.write(message)
-            sys.stdout.flush()
+    def send_msg(self):
+        while True:
+            self.sock.send(bytes(input(""), "utf-8"))
 
-server.close()
+
+if __name__ == "__main__":
+    client = Client(sys.argv[1])
