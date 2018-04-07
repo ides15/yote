@@ -11,73 +11,68 @@ yote start
 yote connect
     connects a user to the lobby at yote.rocks:8080/12345
 
-
-
-
-
-
-
 """
+
 import socket
-# import select
-# import sys
-# import _thread
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print(socket.gethostbyname("yote.rocks"))
-# server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-# if len(sys.argv) != 3:
-#     print("Correct usage: script, IP address, port number")
-#     exit()
-
-# IP_address = str(sys.argv[1])
-# Port = int(sys.argv[2])
-
-# server.bind((IP_address, Port))
-# server.listen(100)
-
-# list_of_clients = []
+import threading
+import sys
 
 
-# def clientthread(conn, addr):
-#     conn.send(b"Welcome to this chatroom!")
+class Server:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    connections = []
 
-#     while True:
-#         try:
-#             message = conn.recv(2048)
-#             if message:
-#                 print("<" + addr[0] + ">" + message)
-#                 message_to_send = "<" + addr[0] + "> " + message
-#                 broadcast(message_to_send, conn)
-#             else:
-#                 remove(conn)
-#         except:
-#             continue
+    def __init__(self):
+        self.sock.bind(("0.0.0.0", 10000))
+        self.sock.listen(1)
+
+    def handler(self, c, a):
+        while True:
+            data = c.recv(1024)
+            print("data:", data)
+            for connection in self.connections:
+                connection.send(data)
+                print("{connection} send {data}".format(
+                    connection=a, data=data))
+            if not data:
+                print(str(a[0]) + ":" + str(a[1]), "disconnected")
+                self.connections.remove(c)
+                c.close()
+                break
+
+    def run(self):
+        while True:
+            c, a = self.sock.accept()
+            cThread = threading.Thread(target=self.handler, args=(c, a))
+            cThread.daemon = True
+            cThread.start()
+            self.connections.append(c)
+            print(str(a[0]) + ":" + str(a[1]), "connected")
 
 
-# def broadcast(message, connection):
-#     for clients in list_of_clients:
-#         if clients != connection:
-#             try:
-#                 clients.send(message)
-#             except:
-#                 clients.close()
-#                 remove(clients)
+class Client:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def __init__(self, address):
+        self.sock.connect((address, 10000))
+
+        iThread = threading.Thread(target=self.send_msg)
+        iThread.daemon = True
+        iThread.start()
+
+        while True:
+            data = self.sock.recv(1024)
+            if not data:
+                break
+            print(str(data, "utf-8"))
+
+    def send_msg(self):
+        while True:
+            self.sock.send(bytes(input(""), "utf-8"))
 
 
-# def remove(connection):
-#     if connection in list_of_clients:
-#         list_of_clients.remove(connection)
-
-
-# while True:
-#     conn, addr = server.accept()
-#     list_of_clients.append(conn)
-
-#     print(addr[0] + " connected")
-
-#     _thread.start_new_thread(clientthread, (conn, addr))
-
-# conn.close()
-# server.close()
+if (len(sys.argv) > 1):
+    client = Client(sys.argv[1])
+else:
+    server = Server()
+    server.run()
