@@ -6,6 +6,9 @@ import json
 import fire
 import requests
 
+# from lobby.client import Client
+# from lobby.server import Server
+
 cwd = os.getcwd()
 yote_dir_path = cwd + "/.yote"
 yote_config_file = yote_dir_path + "/config.json"
@@ -19,11 +22,14 @@ def start():
     requests.post("http://localhost:8080/lobby")
     pass
 
+
 def connect():
     requests.get("http://localhost:8080/lobby")
     pass
 
 # sends the file at <path> to DB as JSON object
+
+
 def send(path):
     data = {}
 
@@ -77,13 +83,14 @@ def recv():
 # param url: from yote frontend > Generate Session
 def init(url):
     parsed_url = urlparse.urlparse("http://" + url)
+    # print(parsed_url)
 
     # creates data dict with session_url key
     # {
     #   "session_url": "/<unique url path>"
     # }
     data = {}
-    data["session_url"] = parsed_url.netloc
+    data["session_url"] = parsed_url.path
 
     # if a yote workspace exists don't create a new one
     if os.path.exists(yote_dir_path):

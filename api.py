@@ -7,8 +7,8 @@ import sqlite3
 from flask import Flask, request
 from flask_cors import CORS
 
-from lobby.server import Server
-from lobby.client import Client
+# from lobby.server import Server
+# from lobby.client import Client
 
 app = Flask(__name__)
 CORS(app)
@@ -21,13 +21,13 @@ c = conn.cursor()
 @app.route("/lobby", methods=["GET", "POST"])
 def lobby():
     if request.method == "GET":
-        Client("127.0.0.1", 10000)
+        # Client("127.0.0.1", 10000)
 
         return "lobby - get"
 
     if request.method == "POST":
-        server = Server("127.0.0.1", 10000)
-        server.run()
+        # server = Server("127.0.0.1", 10000)
+        # server.run()
 
         return "lobby - post"
 
@@ -38,24 +38,19 @@ def session():
     # creates the session URL for the frontend link
     if request.method == "GET":
         # returning a uuid for the session_url
-        return "yote.rocks/" + str(uuid.uuid4())
+        return "yote.rocks/session/" + str(uuid.uuid4())
 
-    # persists the session information (session_url, port, user_id)
+    # persists the session information (session_url, user_id)
     if request.method == "POST":
         # response.data (encoded string) decoded and loaded into dict
         res = json.loads(request.data.decode())
 
-        # TODO make not hardcoded
-        # port should increment every time
-        # a post request is fired up to 8100
-        port = 8081
-
-        # res (dict) loaded into a (session_url, port) 2-tuple
-        data = (res["session_url"], port)
-        print("initializing sessiong with data", data)
+        # res (dict) loaded into a (session_url,) 1-tuple
+        data = (res["session_url"],)
+        # print("initializing sessiong with data", data)
 
         c.execute(
-            "INSERT INTO sessions(session_url, port) VALUES (?, ?)", data)
+            "INSERT INTO sessions(session_url) VALUES (?)", data)
         conn.commit()
 
         # sending session_url back to the client
