@@ -1,18 +1,33 @@
 import socket
 import threading
 import sys
+import os
+import json
 
 
 class Client:
+    # creates socket using TCP
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+    # gets the session_url from the yote config file
+    with open(os.getcwd() + "/.yote/config.json", "r") as config:
+        config_info = json.loads(config.read())
+        session_url = config_info["session_url"]
+
+    # on client class init, connect to the ip address
+    # and port and send the session_url to the server
+    # to be added to the connections list
     def __init__(self, address, port):
         self.sock.connect((address, port))
+        self.sock.send(self.session_url.encode())
 
+        # start a thread for the client to broadcast over the lobby
         iThread = threading.Thread(target=self.send_msg)
         iThread.daemon = True
         iThread.start()
 
+        # receives information from server and prints
+        # it to stdin
         while True:
             data = self.sock.recv(1024)
             if not data:
@@ -21,8 +36,9 @@ class Client:
 
     def send_msg(self):
         while True:
+            # sends stdin to lobby to be broadcasted
             self.sock.send(bytes(input(""), "utf-8"))
 
 
 if __name__ == "__main__":
-    Client(sys.argv[1], 10000)
+    Client("localhost", 10000)
