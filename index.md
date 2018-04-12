@@ -14,8 +14,7 @@ I'll be making a documentation folder in my repository page for things like usag
 By Checkpoint 1, since I just finalized what I am doing for the project, I don't expect to have much done, but I'll look into how I'll set up the lobby and how multiple users can connect to that lobby easily. I also want to be able to send files between users so that all users have a starting file to work from. This will be established through a CLI and an API, and the starting file(s) will be persisted in a sqlite database.
 
 By Checkpoint 2, I want to have the lobby set up in the following fashion:
-- CLI command to start lobby server for the original user's session URL
-- CLI command to allow other users to connect to that lobby
+- CLI command to allow users to connect to a lobby specific to their session URL
 - lobby unique to a specific session URL (only users with the specific session URL can connect to that lobby)
 - users can "chat" through that lobby (I'm not building a chat application, but a chat app is very similar in terms of the lobby system I want to implement so I'll just have the chat app working by Checkpoint 2)
 
