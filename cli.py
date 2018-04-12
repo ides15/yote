@@ -6,7 +6,7 @@ import json
 import fire
 import requests
 
-# from lobby.client import Client
+from lobby.client import Client
 # from lobby.server import Server
 
 cwd = os.getcwd()
@@ -18,18 +18,21 @@ yote_config_file = yote_dir_path + "/config.json"
 # persists to user table in DB
 
 
-def start():
-    requests.post("http://localhost:8080/lobby")
-    pass
+# def start():
+    # pass
 
 
 def connect():
-    requests.get("http://localhost:8080/lobby")
-    pass
+    with open(yote_config_file, "r") as config:
+        config_info = json.loads(config.read())
+        session_url = config_info["session_url"]
+
+    print("Connecting to socket lobby...")
+    client = Client("localhost", 10000, session_url)
+    client.run()
+
 
 # sends the file at <path> to DB as JSON object
-
-
 def send(path):
     data = {}
 
@@ -120,6 +123,6 @@ if __name__ == "__main__":
         "init": init,
         "send": send,
         "recv": recv,
-        "start": start,
+        # "start": start,
         "connect": connect
     })

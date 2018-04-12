@@ -9,16 +9,17 @@ class Client:
     # creates socket using TCP
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # gets the session_url from the yote config file
-    with open(os.getcwd() + "/.yote/config.json", "r") as config:
-        config_info = json.loads(config.read())
-        session_url = config_info["session_url"]
-
     # on client class init, connect to the ip address
     # and port and send the session_url to the server
     # to be added to the connections list
-    def __init__(self, address, port):
-        self.sock.connect((address, port))
+    def __init__(self, address, port, session_url):
+        self.address = address
+        self.port = port
+        self.session_url = session_url
+
+    def run(self):
+        self.sock.connect((self.address, self.port))
+        print("Connected to socket lobby.")
         self.sock.send(self.session_url.encode())
 
         # start a thread for the client to broadcast over the lobby
@@ -40,5 +41,5 @@ class Client:
             self.sock.send(bytes(input(""), "utf-8"))
 
 
-if __name__ == "__main__":
-    Client("localhost", 10000)
+# if __name__ == "__main__":
+    # Client("localhost", 10000)

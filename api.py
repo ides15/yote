@@ -21,14 +21,9 @@ c = conn.cursor()
 @app.route("/lobby", methods=["GET", "POST"])
 def lobby():
     if request.method == "GET":
-        # Client("127.0.0.1", 10000)
-
         return "lobby - get"
 
     if request.method == "POST":
-        # server = Server("127.0.0.1", 10000)
-        # server.run()
-
         return "lobby - post"
 
 
