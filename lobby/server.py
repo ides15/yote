@@ -1,11 +1,15 @@
 import socket
 import threading
 import sys
+import re
+from base64 import b64encode
+from hashlib import sha1
 
 
 class Server:
     # create socket using TCP
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     # create list of connections, consists
     # of 3-tuple of (socket object, address, session_url)
@@ -22,6 +26,31 @@ class Server:
         while True:
             # a socket sends data to the server
             data = c.recv(1024)
+            print("received data")
+            data = data.decode()
+            print(data)
+
+            websocket_response = (
+                "HTTP/1.1 101 Switching Protocols",
+                "Upgrade: websocket",
+                "Connection: Upgrade",
+                "Sec-WebSocket-Accept: {key}\r\n\r\n"
+            )
+
+            magic_string = b"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+
+            key = re.search(
+                r'Sec-WebSocket-Key:\s+(.*?)[\n\r]+', data).groups()[0].encode()
+
+            response_key = b64encode(sha1(key + magic_string).digest())
+            response = "\r\n".join(websocket_response).format(
+                key=response_key.decode())
+
+            print(response)
+            c.send(response.encode())
+
+            print(c.recv(1024))
+            c.send(b"hello from server")
 
             for connection in self.connections:
                 # if the socket sending data matches the current
@@ -57,10 +86,12 @@ class Server:
         while True:
             # accepts a socket connection
             c, a = self.sock.accept()
+            print("accepted a connection")
 
             # on connection acceptance, the new socket
             # sends the server the client's session_url
-            session_url = c.recv(1024)
+            # session_url = c.recv(1024)
+            session_url = "test"
 
             # server starts a thread for the client
             cThread = threading.Thread(
@@ -72,7 +103,7 @@ class Server:
             # to the connections list
             self.connections.append((c, a, session_url))
             print(str(a[0]) + ":" + str(a[1]),
-                  "connected to session", session_url)
+                  "connected to session")
 
 
 if __name__ == "__main__":

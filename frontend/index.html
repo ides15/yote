@@ -146,6 +146,26 @@
                 )
             });
         }
+
+        var server = new WebSocket('ws://localhost:10000')
+
+        server.onclose = function() {
+            console.log('socket onclose');
+        }
+
+        server.onerror = function() {
+            console.log('socket onerror');
+        }
+
+        server.onmessage = function() {
+            console.log('socket onmessage');
+        }
+
+        server.onopen = function() {
+            console.log('socket onopen');
+        }
+
+        console.log(server)
     </script>
 
 </body>
