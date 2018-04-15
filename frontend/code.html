@@ -1,43 +1,13 @@
 <!DOCTYPE html>
 <html>
-<title>Yote</title>
+<title>Yote - Code</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/index.css">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<style>
-    body {
-        font-family: "Lato", sans-serif
-    }
-
-    .mySlides {
-        display: none
-    }
-
-    .socialLink {
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    #button {
-        width: 150px;
-        height: 50px;
-        border: none;
-        border: solid 2px black;
-        border-radius: 5px;
-        background: rgba(255, 255, 255, 0);
-        color: black;
-        font-size: 25px;
-    }
-
-    #button:hover {
-        cursor: pointer;
-        background: black;
-        color: white;
-    }
-</style>
 
 <body>
 
@@ -48,8 +18,8 @@
                 title="Toggle Navigation Menu">
                 <i class="fa fa-bars"></i>
             </a>
-            <a href="#" class="w3-bar-item w3-button w3-padding-large">HOME</a>
-            <a href="code.html" class="w3-bar-item w3-button w3-padding-large">CODE</a>
+            <a href="index.html" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+            <a href="#" class="w3-bar-item w3-button w3-padding-large">CODE</a>
             <a href="#profile" class="w3-bar-item w3-button w3-padding-large w3-hide-small">PROFILE</a>
             <a href="https://github.com/ides15/yote" target="_blank" class="w3-bar-item w3-button w3-padding-large w3-hide-small">SOURCE</a>
             <a href="#about" class="w3-bar-item w3-button w3-padding-large w3-hide-small">ABOUT</a>
@@ -58,7 +28,7 @@
 
     <!-- Navbar on small screens -->
     <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
-        <a href="code.html" class="w3-bar-item w3-button w3-padding-large">CODE</a>
+        <a href="index.html" class="w3-bar-item w3-button w3-padding-large">HOME</a>
         <a href="#profile" class="w3-bar-item w3-button w3-padding-large">PROFILE</a>
         <a href="https://github.com/ides15/yote" class="w3-bar-item w3-button w3-padding-large">SOURCE</a>
         <a href="#about" class="w3-bar-item w3-button w3-padding-large">ABOUT</a>
@@ -69,12 +39,10 @@
 
         <!-- Image -->
         <div class="mySlides w3-display-container w3-center">
-            <img src="black.jpg" style="width:100%">
-            <div class="w3-display-topmiddle w3-container" style="margin-top: 50px">
-                <h1>Generate a Session</h1>
-                <p>
-                    <button id="button" onclick="generateSession()">Click here</button>
-                </p>
+            <img src="black.jpg" style="width: 100%">
+            <div class="sidebar">
+                <div class="content">STATUS</div>
+                <div class="content">CONNECTIONS</div>
             </div>
         </div>
 
@@ -113,40 +81,22 @@
     </footer>
 
     <script>
-        // Automatic Slideshows
-        var myIndex = 0;
-        carousel();
+        var server = new WebSocket('ws://localhost:10000')
 
-        function carousel() {
-            var i;
-            var x = document.getElementsByClassName("mySlides");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            myIndex++;
-            if (myIndex > x.length) { myIndex = 1 }
-            x[myIndex - 1].style.display = "block";
-            setTimeout(carousel, 4000);
+        server.onclose = function () {
+            console.log('socket onclose');
         }
 
-        // Used to toggle the menu on small screens when clicking on the menu button
-        function myFunction() {
-            var x = document.getElementById("navDemo");
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
-            } else {
-                x.className = x.className.replace(" w3-show", "");
-            }
+        server.onerror = function () {
+            console.log('socket onerror');
         }
 
-        function generateSession() {
-            $.get('http://0.0.0.0:8080/session', function (data, status) {
-                session_url = data;
-                $('#button').replaceWith(
-                    '<h3 style="cursor: pointer">' + session_url + '</h3>' +
-                    '<p>Copy the above link and use the Yote CLI <code>init</code> command to initialize a local session.</p>'
-                )
-            });
+        server.onmessage = function () {
+            console.log('socket onmessage');
+        }
+
+        server.onopen = function () {
+            console.log('socket onopen');
         }
     </script>
 

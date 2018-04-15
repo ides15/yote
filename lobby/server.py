@@ -26,9 +26,7 @@ class Server:
         while True:
             # a socket sends data to the server
             data = c.recv(1024)
-            print("received data")
             data = data.decode()
-            print(data)
 
             websocket_response = (
                 "HTTP/1.1 101 Switching Protocols",
@@ -46,11 +44,7 @@ class Server:
             response = "\r\n".join(websocket_response).format(
                 key=response_key.decode())
 
-            print(response)
             c.send(response.encode())
-
-            print(c.recv(1024))
-            c.send(b"hello from server")
 
             for connection in self.connections:
                 # if the socket sending data matches the current
