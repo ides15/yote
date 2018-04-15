@@ -2,7 +2,7 @@ import socket
 import threading
 import sys
 import re
-from base64 import b64encode
+from base64 import b64encode, b64decode
 from hashlib import sha1
 
 
@@ -26,7 +26,46 @@ class Server:
         while True:
             # a socket sends data to the server
             data = c.recv(1024)
-            data = data.decode()
+            print(data)
+
+            # c.send(b"Server received message")
+
+            # for connection in self.connections:
+            #     # if the socket sending data matches the current
+            #     # connection, don't send that data back to that socket
+            #     if connection[0] != c:
+
+            #         # if the session_url of the socket sending data
+            #         # matches the session_url of the current connection,
+            #         # send the data to that socket. Otherwise, don't send
+            #         # the data to that socket.
+
+            #         # This ensures that users with unique session_urls
+            #         # only send data to and receive data from users
+            #         # with matching session_urls
+            #         if connection[2] == session_url:
+            #             connection[0].send(data)
+
+            # # if the socket sends a disconnect signal
+            # if not data:
+            #     print(str(a[0]) + ":" + str(a[1]),
+            #           " disconnected from session", session_url)
+
+            #     # remove the 3-tuple from the connections list
+            #     self.connections.remove((c, a, session_url))
+
+            #     # close the connection
+            #     c.close()
+
+            #     # stop the thread
+            #     break
+
+    def run(self):
+        while True:
+            # accepts a socket connection
+            c, a = self.sock.accept()
+
+            data = c.recv(1024).decode()
 
             websocket_response = (
                 "HTTP/1.1 101 Switching Protocols",
@@ -45,42 +84,6 @@ class Server:
                 key=response_key.decode())
 
             c.send(response.encode())
-
-            for connection in self.connections:
-                # if the socket sending data matches the current
-                # connection, don't send that data back to that socket
-                if connection[0] != c:
-
-                    # if the session_url of the socket sending data
-                    # matches the session_url of the current connection,
-                    # send the data to that socket. Otherwise, don't send
-                    # the data to that socket.
-
-                    # This ensures that users with unique session_urls
-                    # only send data to and receive data from users
-                    # with matching session_urls
-                    if connection[2] == session_url:
-                        connection[0].send(data)
-
-            # if the socket sends a disconnect signal
-            if not data:
-                print(str(a[0]) + ":" + str(a[1]),
-                      " disconnected from session", session_url)
-
-                # remove the 3-tuple from the connections list
-                self.connections.remove((c, a, session_url))
-
-                # close the connection
-                c.close()
-
-                # stop the thread
-                break
-
-    def run(self):
-        while True:
-            # accepts a socket connection
-            c, a = self.sock.accept()
-            print("accepted a connection")
 
             # on connection acceptance, the new socket
             # sends the server the client's session_url
