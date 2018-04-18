@@ -4,7 +4,6 @@ from factory import YoteServerFactory
 if __name__ == "__main__":
     import asyncio
 
-    ServerFactory = YoteServerFactory
     factory = YoteServerFactory(u"ws://localhost:10000")
     factory.protocol = YoteServerProtocol
 
