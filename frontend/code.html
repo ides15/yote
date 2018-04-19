@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="lib/codemirror.css">
+<script src="mode/javascript/javascript.js"></script>
 
 <body>
 
@@ -38,16 +41,20 @@
     <div class="w3-content" style="max-width:2000px;margin-top:46px">
 
         <!-- Image -->
-        <div class="mySlides w3-display-container w3-center">
+        <div class="mySlides w3-display-container w3-center" id="main">
             <img src="black.jpg" style="width: 100%">
             <div class="sidebar">
                 <div class="content" style="height: 25%">
-                    <span><strong>STATUS</strong></span>
+                    <span>
+                        <strong>STATUS</strong>
+                    </span>
                     <div id="status"></div>
                     <div id="ready_state"></div>
                 </div>
                 <div class="content">
-                    <span><strong>CONNECTIONS</strong></span>
+                    <span>
+                        <strong>CONNECTIONS</strong>
+                    </span>
                     <ul id="connections_list"></ul>
                 </div>
             </div>
@@ -88,6 +95,8 @@
     </footer>
 
     <script src="js/socket.js"></script>
+    <script src="js/editor.js"></script>
+    <link rel="stylesheet" href="css/material.css">
 
 </body>
 

@@ -2,8 +2,13 @@
 
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
+  top: 0;
+  right: 0;
+  position: absolute !important;
+  height: 100%;
+  width: 85%;
+  text-align: left;
   font-family: monospace;
-  height: 300px;
   color: black;
   direction: ltr;
 }
