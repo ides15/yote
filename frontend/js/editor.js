@@ -6,14 +6,10 @@ var config = {
     lineNumbers: true
 };
 
-var editor = CodeMirror(document.getElementById("main"), config);
-var objToSend = {};
+editorPosition = document.getElementById("main");
 
-editor.on("change", function(e, change) {
-    console.log(change);
+var editor = CodeMirror(editorPosition, config);
+
+editor.on("inputRead", function (cm, change) {
     server.send(JSON.stringify(change));
-});
-
-editor.on("cursorActivity", function(e) {
-    console.log(editor.getCursor());
 });

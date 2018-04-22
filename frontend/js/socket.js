@@ -1,26 +1,29 @@
 var server = new WebSocket('ws://localhost:10000');
 
 server.onclose = function () {
-    console.log('socket onclose');
     $('#status').text("Socket is closed");
     $('#ready_state').text("Ready state: " + server.readyState)
 }
 
 server.onerror = function () {
-    console.log('socket onerror');
     $('#status').text("Socket has error");
     $('#ready_state').text("Ready state: " + server.readyState)
 }
 
 server.onmessage = function (e) {
-    console.log('socket onmessage');
-    console.log(e.data);
-    $('#status').text("Socket received message");
-    $('#ready_state').text("Ready state: " + server.readyState)
+    $('#ready_state').text("Ready state: " + server.readyState);
+
+    var res = JSON.parse(e.data);
+
+    var replacement = res.text;
+    var from = res.from;
+    var to = res.to;
+    var origin = res.origin;
+
+    editor.getDoc().replaceRange(replacement, from, to, origin);
 }
 
 server.onopen = function () {
-    console.log('socket onopen');
     $('#status').text("Socket is open");
     $('#ready_state').text("Ready state: " + server.readyState)
 }
