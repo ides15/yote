@@ -20,7 +20,11 @@ server.onmessage = function (e) {
     var to = res.to;
     var origin = res.origin;
 
-    editor.getDoc().replaceRange(replacement, from, to, origin);
+    if (res.origin == "+delete") {
+        editor.getDoc().replaceRange(replacement, from, to);
+    } else {
+        editor.getDoc().replaceRange(replacement, from, to, origin);
+    }
 }
 
 server.onopen = function () {
