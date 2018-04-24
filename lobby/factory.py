@@ -20,6 +20,14 @@ class YoteServerFactory(WebSocketServerFactory):
             self.clients.remove(client)
 
     def broadcast(self, origin, msg):
+        if msg is None:
+            msg = json.dumps({
+                "connections": [client.peer for client in self.clients]
+            }).encode()
+
+            for c in self.clients:
+                c.sendMessage(msg)
+
         for c in self.clients:
             if c is not origin:
                 c.sendMessage(msg)

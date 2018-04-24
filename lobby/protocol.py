@@ -1,5 +1,4 @@
 import json
-from pprint import pprint
 
 from autobahn.asyncio.websocket import WebSocketServerProtocol
 
@@ -7,11 +6,12 @@ from autobahn.asyncio.websocket import WebSocketServerProtocol
 class YoteServerProtocol(WebSocketServerProtocol):
     def onOpen(self):
         self.factory.register(self)
+        self.factory.broadcast(self, None)
 
     def onMessage(self, payload, isBinary):
         if not isBinary:
             self.factory.broadcast(self, payload)
 
-    def connectionLost(self, reason):
-        WebSocketServerProtocol.connectionLost(self, reason)
+    def onClose(self, wasClean, code, reason):
         self.factory.unregister(self)
+        self.factory.broadcast(self, None)
