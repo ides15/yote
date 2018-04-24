@@ -22,3 +22,12 @@ body {
     height: 100%;
     text-align: left;
 }
+
+#connections_list {
+    padding: 0;
+    margin: 0;
+}
+
+.connection {
+    list-style: none;
+}
