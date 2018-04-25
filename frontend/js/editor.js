@@ -12,12 +12,16 @@ editorPosition = document.getElementById("main");
 var editor = CodeMirror(editorPosition, config);
 
 editor.on("inputRead", function (cm, change) {
-    server.send(JSON.stringify(change));
+    server.send(JSON.stringify(Object.assign({
+        session_url: localStorage.getItem('session_url'),
+    }, change)));
 });
 
 editor.on("change", function (cm, change) {
     if (change.origin === "+delete") {
-        server.send(JSON.stringify(change));
+        server.send(JSON.stringify(Object.assign({
+            session_url: localStorage.getItem('session_url'),
+        }, change)));
     }
 });
 
@@ -29,12 +33,14 @@ editor.on("keyHandled", function (cm, name, e) {
             text: "\n",
             from: cursor,
             to: cursor,
+            session_url: localStorage.getItem('session_url'),
         }));
     } else if (name === "Tab") {
         server.send(JSON.stringify({
             text: "\t",
             from: cursor,
             to: cursor,
+            session_url: localStorage.getItem('session_url'),
         }));
     }
 });

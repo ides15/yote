@@ -33,7 +33,7 @@ def session():
     # creates the session URL for the frontend link
     if request.method == "GET":
         # returning a uuid for the session_url
-        return "yote.rocks/session/" + str(uuid.uuid4())
+        return str(uuid.uuid4())
 
     # persists the session information (session_url, user_id)
     if request.method == "POST":

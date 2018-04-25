@@ -3,17 +3,17 @@ var server = new WebSocket('ws://localhost:10000');
 server.onopen = function () {
     $('#status').text("Socket is open");
     $('#ready_state').text("Ready state: " + server.readyState)
+    server.send(JSON.stringify({
+        session_url: localStorage.getItem('session_url'),
+    }));
 }
 
 server.onmessage = function (e) {
     $('#ready_state').text("Ready state: " + server.readyState);
 
     var res = JSON.parse(e.data);
-    // console.log(res);
 
     if (res.connections) {
-        console.log("connections message");
-
         var connections_list = $('#connections_list');
         connections_list.empty();
 
@@ -25,18 +25,20 @@ server.onmessage = function (e) {
         return;
     }
 
-    var replacement = res.text;
-    var from = res.from;
-    var to = res.to;
-    var origin = res.origin;
+    if (res.session_url == localStorage.getItem('session_url')) {
+        var replacement = res.text;
+        var from = res.from;
+        var to = res.to;
+        var origin = res.origin;
 
-    if (res.origin == "+delete") {
-        editor.getDoc().replaceRange(replacement, from, to);
-    } else {
-        editor.getDoc().replaceRange(replacement, from, to, origin);
+        if (res.origin == "+delete") {
+            editor.getDoc().replaceRange(replacement, from, to);
+        } else {
+            editor.getDoc().replaceRange(replacement, from, to, origin);
+        }
+
+        editor.indentLine(to.line, "smart");
     }
-
-    editor.indentLine(to.line, "smart");
 }
 
 server.onerror = function () {

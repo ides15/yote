@@ -27,7 +27,7 @@ class YoteServerFactory(WebSocketServerFactory):
 
             for c in self.clients:
                 c.sendMessage(msg)
-
+        
         for c in self.clients:
             if c is not origin:
                 c.sendMessage(msg)

@@ -37,6 +37,18 @@
         background: black;
         color: white;
     }
+
+    input {
+        background: rgba(255, 255, 255, 0);
+        border: none;
+        border-bottom: 2px solid black;
+        font-size: 24px;
+        width: 400px;
+    }
+
+    input:focus {
+        outline: none;
+    }
 </style>
 
 <body>
@@ -75,6 +87,10 @@
                 <p>
                     <button id="button" onclick="generateSession()">Click here</button>
                 </p>
+                <form>
+                    <h2>or join an existing session:</h2>
+                    <input type="text" id="session_to_join">
+                </form>
             </div>
         </div>
 
@@ -140,14 +156,23 @@
         }
 
         function generateSession() {
-            $.get('http://0.0.0.0:8080/session', function (data, status) {
-                session_url = data;
+            $.get('http://0.0.0.0:8080/session', function (session_url, status) {
                 $('#button').replaceWith(
-                    '<h3 style="cursor: pointer">' + session_url + '</h3>' +
-                    '<p>Copy the above link and use the Yote CLI <code>init</code> command to initialize a local session.</p>'
+                    '<h3 style="cursor: pointer"><a href="code.html">yote.rocks/session/' + session_url + '</a></h3>' +
+                    '<p>Navigate to the above link, distribute the link, or use the Yote CLI <code>init</code> command to initialize a local session.</p>'
                 )
+                localStorage.setItem('session_url', 'yote.rocks/session/' + session_url);
             });
         }
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var joinable_session = $('#session_to_join').val();
+
+            localStorage.setItem('session_url', joinable_session);
+
+            window.location.replace('code.html');
+        });
     </script>
 
 </body>
