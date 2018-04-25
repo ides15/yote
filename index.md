@@ -20,7 +20,7 @@ By Checkpoint 2, I want to have the lobby set up in the following fashion:
 
 I also want to have a frontend set up by Checkpoint 2 that allows a user to generate a session URL that the user can distribute to other users so that they can join a common session. That URL will then be used to join a unique lobby (see the previous paragraph). This frontend will also have various links to my github page and other social pages.
 
-By Checkpoint 3, I want to have figured out how I will track events from text inputs from the origin host and other users and broadcast those events to all users in the lobby. After I implement the event tracking, I will figure out how to fire those events in the other users' machines. I'm not sure exactly where on the user's computer I'll broadcast those events to (maybe on a web interface), but it should show real-time event logging of all users in the lobby.
+By Checkpoint 3, I will have created a web interface for users to connect to so they can have a place to edit code. The connecting to this interface will be done by a landing page (which gives the user a place to either generate a session or join an existing session) and a coding page (includes an editor and a list of all people connected to the server). Users will be able to write code on this editor and the changes to this code will be reflected in the editors of all other clients connected to that session.
 
 The final project should be operational collaborative coding between multiple users (similar to Google Docs). This includes the lobby session creation and collaborative usage. The lobby should be unique and only accept users who have the correct session URL.
 
@@ -40,3 +40,24 @@ The lobby sessions will be difficult because there needs to be a way that users 
 Security is very important for this project because private source code obviously can't be sent across the internet unprotected. Another reason is because the lobby sessions should only be reserved for users that the original user wants in that lobby, not random people that can edit the code however they want.
 
 Event tracking is the third main complexity with this project. Sending information between computers isn't hard, but finding the information to send and doing it in a way that is fast and easily consumable will be a challenge. I am only going to be using a web interface at first due to it's simplicity and the fact that it is an established way of people to collaborate over an internet. Once the project works well with the web interface, I can look into a more universal system that can work with multiple programming environments.
+
+### Usage
+To download the code and all dependencies:
+
+`git clone https://github.com/ides15/yote.git`
+
+`cd yote`
+
+`pip3 install -r requirements.txt`
+
+To run the application:
+- In Terminal #1:
+
+    `python3 lobby/server.py`
+- In Terminal #2:
+
+    `python3 api.py`
+
+Navigate to `file:///<place the project is stored>/frontend/index.html` in your browser.
+
+NOTE: because this project is hosted locally and requests to the API will be met with an `Access-Control-Allow-Origin` headers warning, there needs to be a way to bypass the CORS problem. In Google Chrome, I am using the [Allow-Control-Allow-Origin: * extension]("https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi"). In Firefox, the error doesn't happen.
