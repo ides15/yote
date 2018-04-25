@@ -1,5 +1,9 @@
+// Creating a WebSocket instance
 var server = new WebSocket('ws://localhost:10000');
 
+// When the socket is connected to the socket server,
+// the socket will send the server the session_url that
+// is connected.
 server.onopen = function () {
     $('#status').text("Socket is open");
     $('#ready_state').text("Ready state: " + server.readyState)
@@ -8,11 +12,16 @@ server.onopen = function () {
     }));
 }
 
+// When the socket receives a message from the server,
+// the message will be parsed as JSON.
 server.onmessage = function (e) {
     $('#ready_state').text("Ready state: " + server.readyState);
 
     var res = JSON.parse(e.data);
 
+    // If the message is a list of connections on the server,
+    // the list of connections will be updated with the current
+    // connections.
     if (res.connections) {
         var connections_list = $('#connections_list');
         connections_list.empty();
@@ -25,6 +34,9 @@ server.onmessage = function (e) {
         return;
     }
 
+    // If the session_url of the client sending the incoming message 
+    // is the same session_url as the currently connected client,
+    // reflect the change as described in the incoming "change" object.
     if (res.session_url == localStorage.getItem('session_url')) {
         var replacement = res.text;
         var from = res.from;
@@ -37,6 +49,7 @@ server.onmessage = function (e) {
             editor.getDoc().replaceRange(replacement, from, to, origin);
         }
 
+        // Handles the code style indentaion
         editor.indentLine(to.line, "smart");
     }
 }
