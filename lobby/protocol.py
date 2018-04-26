@@ -1,6 +1,11 @@
 import json
+import sqlite3
 
 from autobahn.asyncio.websocket import WebSocketServerProtocol
+
+# connects to db and causes sqlite to run on multithreaded system (supporting Flask)
+conn = sqlite3.connect("yote.db", check_same_thread=False)
+c = conn.cursor()
 
 
 class YoteServerProtocol(WebSocketServerProtocol):
@@ -8,6 +13,10 @@ class YoteServerProtocol(WebSocketServerProtocol):
     # and broadcast the list of connections to all
     # currently connected users.
     def onOpen(self):
+        c.execute(
+            "INSERT INTO clients(client) VALUES (?)", (self.peer, ))
+        conn.commit()
+
         self.factory.register(self)
         self.factory.broadcast(self, None)
 
