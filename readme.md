@@ -24,6 +24,11 @@ By Checkpoint 3, I will have created a web interface for users to connect to so 
 
 The final project should be operational collaborative coding between multiple users (similar to Google Docs). This includes the lobby session creation and collaborative usage. The lobby should be unique and only accept users who have the correct session URL.
 
+## Finished Project Remarks
+After finishing this project, I looked back on my initial goals for this project. I wanted to make a "Google Docs"-like interface to aid programmers in pair programming remotely. I think I have made a good representation of what I want the program to do. Users can generate sessions to work on code and other users can join those sessions to work on code together. Changes made on one user's editor will be reflected in all other users' editors in real time. Users connected to one session won't be able to edit code in other sessions, or vice-versa.
+
+I wanted to add things like authentication, more language support, the ability to load files from a user's filesystem, and the ability to download completed files onto the user's filesystem. Also, originally I wanted to make a lower-level CLI API for key-bindings for editors to make their own real time "Google Docs"-like interface, but revised my proposal so that it would be easier to demonstrate for the class's purposes and to actually have something visible for the final presentation.
+
 ## Project Justification
 
 ### Novelty
